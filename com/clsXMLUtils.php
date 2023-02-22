@@ -32,7 +32,15 @@ class clsXMLUtils{
         return true;
     }
 //////////////////////////////////////////////////////////////////////////////
-    private function arraytoXML(array $pArr){     
+
+public function ApplyXPath2(string $pPath,object $pXML):bool{
+
+    $arr=$pXML->xpath($pPath);
+    $this->result=$this->arraytoXML($arr);
+    return true;
+}
+//////////////////////////////////////////////////////////////////////////////
+    public function arraytoXML(array $pArr){     
         $str=$this->arraytoXMLString( $pArr);
         return simplexml_load_string($str);
     }
@@ -46,6 +54,10 @@ class clsXMLUtils{
         return $str;
     }
 //////////////////////////////////////////////////////////////////////////////
+
+    public function getResult(){
+        return $this->result;
+    }
 }
 
 ?>

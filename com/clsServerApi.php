@@ -1,17 +1,16 @@
 <?php
 
 
-include_once __DIR__."/com/clsXMLUtils.php";
-
 class clsServerApi{
+
     private string $configfile;
     private $obj_xmlutil;
-   
+    private $ArrMethods = array();
 
     function __construct($configfile){
         $this->obj_xmlutil= new clsXMLUtils;
         $this->configfile=$configfile;
-        //$this->Init();
+        $this->Init();
     }
 
     function Init(){
@@ -25,25 +24,62 @@ class clsServerApi{
 
 
     function ParseWebMethods(){
-        $arrMethods=$this->obj_xmlutil->ApplyXpath('//web_methods_collection/web_method');
+
+        $this->obj_xmlutil->ApplyXpath('//web_methods_collection/web_method');
+        $arrMethods = $this->obj_xmlutil->getResult();
+       
         foreach ($arrMethods as $Method) {
-            $this->addMethod($this->obj_xmlutil->ArrayToSimpXML($Method));
+            
+            $this->AddMethod($Method);
+       
         }
     }
-    public function addMethod(SimpleXMLElement $XMLMethod): void{
-        $cls_method= new clsMethod($XMLMethod);
-        array_push($this->ArrMethods, $cls_method);
-       
-    }
 
+    public function AddMethod(SimpleXMLElement $XMLMethod): void{
+        $obj_method= new clsMethod($XMLMethod);
+        
+        array_push($this->ArrMethods, $obj_method);
+       
     }
 
     function Print(): void{
         echo $this->obj_xmlutil->getXML();
+
+    }
+    
+
+    public function Validate(){
+
+        $cont=0;
+
+        if(ClsRequest::Exists('action')){
+
+            $value = ClsRequest::GetValue('action');
+
+                foreach($this->ArrMethods as $method){
+
+                    $result=$method->ValidateAction($value);
+
+                    if(!$result){
+                        $cont++;
+                    }else{
+                        return $result;
+                    }
+                }
+    
+                if($cont == count($this->ArrMethods)){
+                    return [[2,$value]];
+                }
+                
+        }else{
+            return [[1,'action']];
+        }
+    }
+
+   
     }
 
 
-}
 
 
 
