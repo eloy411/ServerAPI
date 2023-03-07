@@ -1,9 +1,10 @@
 <?php
 
-class clsXMLUtils{
+class ClsXMLUtils{
     private $obj_simplexml_base;
     private $result;
     private $error_num;
+    
 //////////////////////////////////////////////////////////////////////////////
     function __construct(){
         //echo "-> clsXMLUtils constructor";
@@ -58,6 +59,46 @@ public function ApplyXPath2(string $pPath,object $pXML):bool{
     public function getResult(){
         return $this->result;
     }
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+    public function headXML(array $info) {
+
+        $str = "<? xmlversion='1.0' encoding='UTF-8'?><movies>hola</movies>";
+        // $xmlHeader = <<<XML 
+       
+        //     <head>
+        //         <server_id>$info[0]</server_id>
+        //         <server_time>$info[1]</server_time>
+        //         <execution_time>$info[2]</execution_time>
+        //         <url>$info[3]</url>
+        //     </head>
+        // XML;
+
+        $xmlDoc = new DOMDocument();
+
+        $root = $xmlDoc->appendChild($xmlDoc->createElement('ws_response'));
+        $head = $xmlDoc->createElement('head');
+        $serId =  $xmlDoc->createElement('server_id',$info[0]);
+        $serTime = $xmlDoc->createElement('server_time',$info[1]);
+        $execTime = $xmlDoc->createElement('execution_time',$info[2]);
+        $url = $xmlDoc->createElement('url',$info[3]);
+
+        $head->append($serId,$serTime,$execTime,$url);
+        $root->appendChild($head);
+
+        return $xmlDoc;
+    }
+    
+    static function errorXML(){
+
+    }
+
+    static function responseXML(){
+
+    }
+
 }
 
 ?>

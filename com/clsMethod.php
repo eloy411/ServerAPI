@@ -13,44 +13,33 @@ class clsMethod{
     function __construct($objXML)
     {
         $this->objXml = $objXML;
-        $this->description = (string)$this->objXml->description;
-        $this->endPoint = (string)$this->objXml->endpoint;
-        $this->paramsCollection = (object)$this->objXml->params_collection;
+        $this->description = (string) $this->objXml->description; 
+        $this->endPoint = (string) $this->objXml->endpoint;
+        $this->paramsCollection = (object) $this->objXml->params_collection;
         $this->Init();
     }
 
-
-    function getDescription(){
-
-        return $this->description;
-    }
-
-    function getEndPoint(){
-
-        return $this->endPoint;
-    }
-
-    function getObjXml(){
-
-        return $this->objXml;
-    }
 
     function Init(){
         $this->ParseWebParams();
     }
 
-    function ParseWebParams(){
+    private function ParseWebParams(){
         foreach($this->paramsCollection as $params){
+
             foreach($params as $param){
+
                 if($param["name"]=='action'){
                     $this->AddAction($param);
                 }else{
                     $this->AddParam($param);
                 }
+
             }
+
         };
     }
-
+   
 
     function AddParam($data){
         $obj_method = new clsParam($data);
@@ -66,15 +55,22 @@ class clsMethod{
     public function ValidateAction($value){
         
         if($value === $this->action){
+
             foreach($this->paramsList as $param){
-                    array_push($this->result,$param->ValidateAttributes());
+                
+                    $result = $param->ValidateAttributes();
+
+                    if(is_object($result)){
+                        array_push($this->result,$result);
+                    }
+                    
                 }
 
             return $this->result;
         }
-        
+
         return false;
-        ;
+        
     }
 
 };

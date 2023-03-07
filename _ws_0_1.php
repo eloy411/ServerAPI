@@ -1,26 +1,21 @@
 <?php
-/*
-Verificar:
-- Definición de datos privados en objetos
-- Errores y su gestión
-- Estrategia de funcionamiento
-- Objetos vs tipos convencionales
-- Strong typed data
-*/
+
+$time_start = microtime(true);
 include_once __DIR__."./com/clsXMLUtils.php";
 include_once "./com/clsParam.php";
 include_once __DIR__."./com/clsMethod.php";
 include_once "./com/clsRequest.php";
 include_once "./com/clsServerApi.php";
-include_once "./com/controlErrors.php";
-
+include_once "./com/clsError.php";
+include_once "./com/clsResponse.php";
 
 $obj_api= new clsServerApi("./xml/dbxml.xml");
-
 $result = $obj_api->Validate();
 
-$errors = new ControlErrors($result);
+$time_end = microtime(true);
+global $time_exec;
+$time_exec = $time_end-$time_start;
+new Response(false,$obj_api->arrErrors,$time_exec);
 
-print_r($errors->listDefined)
 
 ?>

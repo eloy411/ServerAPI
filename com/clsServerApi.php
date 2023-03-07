@@ -6,9 +6,10 @@ class clsServerApi{
     private string $configfile;
     private $obj_xmlutil;
     private $ArrMethods = array();
+    public $arrErrors = array();
 
     function __construct($configfile){
-        $this->obj_xmlutil= new clsXMLUtils;
+        $this->obj_xmlutil= new ClsXMLUtils;
         $this->configfile=$configfile;
         $this->Init();
     }
@@ -27,15 +28,17 @@ class clsServerApi{
 
         $this->obj_xmlutil->ApplyXpath('//web_methods_collection/web_method');
         $arrMethods = $this->obj_xmlutil->getResult();
-       
+     
         foreach ($arrMethods as $Method) {
             
             $this->AddMethod($Method);
+            
        
         }
     }
 
     public function AddMethod(SimpleXMLElement $XMLMethod): void{
+
         $obj_method= new clsMethod($XMLMethod);
         
         array_push($this->ArrMethods, $obj_method);
@@ -58,21 +61,21 @@ class clsServerApi{
 
                 foreach($this->ArrMethods as $method){
 
-                    $result=$method->ValidateAction($value);
+                    $result = $method->ValidateAction($value);
 
-                    if(!$result){
+                    if(is_bool($result)){
                         $cont++;
                     }else{
-                        return $result;
+                        $this->arrErrors = array_merge($this->arrErrors,$result);
                     }
                 }
     
                 if($cont == count($this->ArrMethods)){
-                    return [[2,$value]];
+                    array_push($this->arrErrors,new Errors(2,$value));
                 }
                 
         }else{
-            return [[1,'action']];
+            array_push($this->arrErrors,new Errors(1,'action'));
         }
     }
 
@@ -85,3 +88,4 @@ class clsServerApi{
 
 
 ?>
+
