@@ -2,6 +2,9 @@
 
 class Response{
 
+    
+    public static bool $condition;
+    public static string $typeDebug;
     private int $server_id = 411;
     private string $server_time;
     private string $execution_time;
@@ -10,22 +13,55 @@ class Response{
     // private $templateError;
     // private $templateResponse;
 
-    public function __construct(bool $debug , array $data, string $execution_time){
+    public function __construct(bool $debug, string $typeDebug){
+       Self::$condition = $debug;
+       Self::$typeDebug = $typeDebug;
+    }
+    
+    static function configDebug(string $text = '', mixed $param):void{
 
-        $this->execution_time = $execution_time;
-        $this->server_time =  date("Y/m/d");
-        $this->data = $data;
-        $debug ? $this->debug() : $this->execute();
-
+        if(Response::$condition && Response::$typeDebug == 'config'){
+            Self::debug($param,$text);
+        }
     }
 
-    private function debug():void{
+    static function validationDebug(string $text = '', mixed $param):void{
 
-        print_r($this->data);
-
+        if(Response::$condition && Response::$typeDebug == 'validation'){
+            Self::debug($param,$text);
+        }
     }
 
-    private function execute(){
+    static function debug($param,$text){
+        switch (gettype($param)){
+            case 'array':
+                echo $text;
+                echo '<br>';
+                echo '<br>';
+                print_r($param);
+                echo '<br>';
+                echo '<br>';
+                break;
+            case 'string':
+                echo $text;
+                echo '<br>';
+                echo '<br>';
+                echo $param;
+                echo '<br>';
+                echo '<br>';
+                break;
+            case 'object':
+                echo $text;
+                echo '<br>';
+                echo '<br>';
+                var_dump($param);
+                echo '<br>';
+                echo '<br>';
+                break;
+            }
+    }
+
+    public function execute( array $data, string $execution_time){
 
         $obj_xml = new ClsXMLUtils;
         

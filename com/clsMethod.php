@@ -7,6 +7,7 @@ class clsMethod{
     private string $endPoint;
     private object $paramsCollection;
     private string $action;
+    private int $numParams = 0;
     private array $paramsList = [];
     public $result = [];
 
@@ -16,6 +17,10 @@ class clsMethod{
         $this->description = (string) $this->objXml->description; 
         $this->endPoint = (string) $this->objXml->endpoint;
         $this->paramsCollection = (object) $this->objXml->params_collection;
+
+        Response::configDebug('<b>End-Point</b>', $this->endPoint);
+        Response::configDebug('<b>Description</b>', $this->description);
+
         $this->Init();
     }
 
@@ -42,13 +47,25 @@ class clsMethod{
    
 
     function AddParam($data){
+        $this->numParams++;
+
         $obj_method = new clsParam($data);
         array_push($this->paramsList,$obj_method);
+
+        Response::configDebug(
+            '<b>parametros añadidos</b> ' .$this->numParams,
+            $this->paramsList
+        );
     }
 
 
     function AddAction($data){
         $this->action = $data->default;
+
+        Response::configDebug(
+            '<b>Action method</b>',
+            $this->action
+        );
     }
 
 

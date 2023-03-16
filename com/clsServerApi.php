@@ -4,9 +4,10 @@
 class clsServerApi{
 
     private string $configfile;
-    private $obj_xmlutil;
-    private $ArrMethods = array();
-    public $arrErrors = array();
+    private object $obj_xmlutil;
+    private array $ArrMethods = array();
+    public array $arrErrors = array();
+    private int $numMethods = 0;
 
     function __construct($configfile){
         $this->obj_xmlutil= new ClsXMLUtils;
@@ -39,9 +40,15 @@ class clsServerApi{
 
     public function AddMethod(SimpleXMLElement $XMLMethod): void{
 
+        $this->numMethods++;
+
         $obj_method= new clsMethod($XMLMethod);
         
         array_push($this->ArrMethods, $obj_method);
+
+        Response::configDebug(
+            '<b>Api con '.$this->numMethods. ' métodos</b> ',
+            $this->ArrMethods);
        
     }
 
@@ -79,6 +86,7 @@ class clsServerApi{
         }
     }
 
+        
    
     }
 

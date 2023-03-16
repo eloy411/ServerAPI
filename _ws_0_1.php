@@ -9,13 +9,18 @@ include_once "./com/clsServerApi.php";
 include_once "./com/clsError.php";
 include_once "./com/clsResponse.php";
 
+new Response(true,'config');
 $obj_api= new clsServerApi("./xml/dbxml.xml");
 $result = $obj_api->Validate();
 
+
+
 $time_end = microtime(true);
-global $time_exec;
 $time_exec = $time_end-$time_start;
-new Response(false,$obj_api->arrErrors,$time_exec);
+
+
+
+
 
 
 ?>
