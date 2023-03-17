@@ -47,7 +47,7 @@ class clsServerApi{
         array_push($this->ArrMethods, $obj_method);
 
         Response::configDebug(
-            '<b>Api con '.$this->numMethods. ' métodos</b> ',
+            'Api con '.$this->numMethods. ' métodos ',
             $this->ArrMethods);
        
     }
@@ -64,6 +64,7 @@ class clsServerApi{
 
         if(ClsRequest::Exists('action')){
 
+            
             $value = ClsRequest::GetValue('action');
 
                 foreach($this->ArrMethods as $method){
@@ -78,11 +79,23 @@ class clsServerApi{
                 }
     
                 if($cont == count($this->ArrMethods)){
+
+                    Response::validationDebug('El action introducido no es válido: ', $value);
+
                     array_push($this->arrErrors,new Errors(2,$value));
                 }
+
+                Response::validationDebug('Ha habido un total de '.count($this->arrErrors).' errores',$this->arrErrors);
+
+                return $this->arrErrors;
                 
         }else{
+
+            Response::validationDebug('No existe el action','');
+
             array_push($this->arrErrors,new Errors(1,'action'));
+
+            return $this->arrErrors;
         }
     }
 

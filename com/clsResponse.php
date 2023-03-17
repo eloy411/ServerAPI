@@ -3,7 +3,7 @@
 class Response{
 
     
-    public static bool $condition;
+    public static bool $conditionDebug;
     public static string $typeDebug;
     private int $server_id = 411;
     private string $server_time;
@@ -14,25 +14,28 @@ class Response{
     // private $templateResponse;
 
     public function __construct(bool $debug, string $typeDebug){
-       Self::$condition = $debug;
+       Self::$conditionDebug = $debug;
        Self::$typeDebug = $typeDebug;
     }
     
     static function configDebug(string $text = '', mixed $param):void{
 
-        if(Response::$condition && Response::$typeDebug == 'config'){
+        if(Response::$conditionDebug && Response::$typeDebug == 'config'){
             Self::debug($param,$text);
         }
     }
 
     static function validationDebug(string $text = '', mixed $param):void{
 
-        if(Response::$condition && Response::$typeDebug == 'validation'){
+        if(Response::$conditionDebug && Response::$typeDebug == 'validation'){
             Self::debug($param,$text);
         }
     }
 
     static function debug($param,$text){
+
+        $text = '<b>'.$text.'</b>';
+
         switch (gettype($param)){
             case 'array':
                 echo $text;
@@ -61,25 +64,32 @@ class Response{
             }
     }
 
-    public function execute( array $data, string $execution_time){
+    public function execute( array $data, mixed $execution_time){
 
-        $obj_xml = new ClsXMLUtils;
+        if(!Self::$conditionDebug){
+
+            $obj_xml = new ClsXMLUtils;
+            
+            $this->url = ClsRequest::GetUrl();
+
+            $this->server_time = date('l jS \of F Y h:i:s A');
+
+            array_push($this->arrDataHeader,$this->server_id,$this->server_time,$execution_time,$this->url);
+
+            header("Content-Type: text/xml");
+
+            $obj_xml->headXML($this->arrDataHeader);
+
+            // if(count($this->data) == 0){
+
+            //     $urlParams = ClsRequest::GetURLParams();
+
+            // }else{
+            
+            //     ClsXMLUtils::errorXML('');
+            // }
         
-        $this->url = ClsRequest::GetUrl();
-
-        array_push($this->arrDataHeader,$this->server_id,$this->server_time,$this->execution_time,$this->url);
-
-        echo $obj_xml->headXML($this->arrDataHeader)->asXML();
-
-        if(count($this->data) == 0){
-
-            $urlParams = ClsRequest::GetURLParams();
-
-        }else{
-         
-            ClsXMLUtils::errorXML('');
-        }
-        
+    }
     }
 
 

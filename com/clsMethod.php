@@ -18,8 +18,9 @@ class clsMethod{
         $this->endPoint = (string) $this->objXml->endpoint;
         $this->paramsCollection = (object) $this->objXml->params_collection;
 
-        Response::configDebug('<b>End-Point</b>', $this->endPoint);
-        Response::configDebug('<b>Description</b>', $this->description);
+        Response::configDebug('End-Point', $this->endPoint);
+        Response::configDebug('Description', $this->description);
+        Response::configDebug('Objeto XML', $this->paramsCollection);
 
         $this->Init();
     }
@@ -29,7 +30,7 @@ class clsMethod{
         $this->ParseWebParams();
     }
 
-    private function ParseWebParams(){
+    private function ParseWebParams():void{
         foreach($this->paramsCollection as $params){
 
             foreach($params as $param){
@@ -46,30 +47,31 @@ class clsMethod{
     }
    
 
-    function AddParam($data){
+    function AddParam(object $data){
         $this->numParams++;
 
         $obj_method = new clsParam($data);
         array_push($this->paramsList,$obj_method);
 
         Response::configDebug(
-            '<b>parametros añadidos</b> ' .$this->numParams,
+            'parametros añadidos ' .$this->numParams,
             $this->paramsList
         );
     }
 
 
-    function AddAction($data){
+    function AddAction(object $data){
+
         $this->action = $data->default;
 
         Response::configDebug(
-            '<b>Action method</b>',
+            'Action method',
             $this->action
         );
     }
 
 
-    public function ValidateAction($value){
+    public function ValidateAction(string $value){
         
         if($value === $this->action){
 
@@ -78,7 +80,9 @@ class clsMethod{
                     $result = $param->ValidateAttributes();
 
                     if(is_object($result)){
+
                         array_push($this->result,$result);
+
                     }
                     
                 }

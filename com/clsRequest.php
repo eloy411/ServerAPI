@@ -9,7 +9,7 @@ class ClsRequest{
        
     }
 /////////////////////////////////////////////////////
-    static function Exists($pParam):bool{
+    static function Exists(string $pParam):bool{
         if (isset($_GET[$pParam])){
             return true;
         }else{
@@ -17,9 +17,8 @@ class ClsRequest{
         }
     }
 /////////////////////////////////////////////////////
-    static function GetValue($param):string{
+    static function GetValue(string $param):string{
 
-        // if(ClsRequest::Exists($param)){
             return $_GET[$param];
     }
 

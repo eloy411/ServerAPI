@@ -65,30 +65,15 @@ public function ApplyXPath2(string $pPath,object $pXML):bool{
 
     public function headXML(array $info) {
 
-        $str = "<? xmlversion='1.0' encoding='UTF-8'?><movies>hola</movies>";
-        // $xmlHeader = <<<XML 
-       
-        //     <head>
-        //         <server_id>$info[0]</server_id>
-        //         <server_time>$info[1]</server_time>
-        //         <execution_time>$info[2]</execution_time>
-        //         <url>$info[3]</url>
-        //     </head>
-        // XML;
+        $str='<?xml version="1.0" encoding="UTF-8"?>
+        <movies>
+        <movie>hola</movie>
+        </movies>';
 
-        $xmlDoc = new DOMDocument();
 
-        $root = $xmlDoc->appendChild($xmlDoc->createElement('ws_response'));
-        $head = $xmlDoc->createElement('head');
-        $serId =  $xmlDoc->createElement('server_id',$info[0]);
-        $serTime = $xmlDoc->createElement('server_time',$info[1]);
-        $execTime = $xmlDoc->createElement('execution_time',$info[2]);
-        $url = $xmlDoc->createElement('url',$info[3]);
+        $data = simplexml_load_string($str);
 
-        $head->append($serId,$serTime,$execTime,$url);
-        $root->appendChild($head);
-
-        return $xmlDoc;
+        echo $data->asXML();
     }
     
     static function errorXML(){

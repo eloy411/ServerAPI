@@ -42,23 +42,27 @@ class clsParam{
 
             if($this->mandatory == 'yes'){
                 if($value == ''){
+                    Response::validationDebug('El siguiente parámetro no cumple con mandatory: ',$this->name);                    
                     return new Errors(4,$this->name);
                 }
             }
     
             if(gettype($value) != $this->type){
-                return new Errors(5,$this->name);
-  
+
+                    Response::validationDebug('El siguiente parámetro no cumple con el tipo de valor: ',$this->name);    
+                    return new Errors(5,$this->name);
             }
     
             if(strlen($value) < (int)$this->min_length){
-                return new Errors(6,$this->name);
-   
+
+                    Response::validationDebug('El siguiente parámetro no cumple con el mínimo de longitud: ',$this->name);   
+                    return new Errors(6,$this->name);
             }
     
-            // return [0,$this->name];
             return 0;
         }
+
+        Response::validationDebug('El siguiente parámetro no existe:',$this->name);
 
         return new Errors(3,$this->name);
     }
