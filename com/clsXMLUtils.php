@@ -1,5 +1,4 @@
 <?php
-
 class ClsXMLUtils{
     private $obj_simplexml_base;
     private $result;
@@ -7,7 +6,7 @@ class ClsXMLUtils{
     
 //////////////////////////////////////////////////////////////////////////////
     function __construct(){
-        //echo "-> clsXMLUtils constructor";
+
     }
 //////////////////////////////////////////////////////////////////////////////
     public function ReadFile(string $pURL):bool {
@@ -63,17 +62,20 @@ public function ApplyXPath2(string $pPath,object $pXML):bool{
 //////////////////////////////////////////////////////////////////////////////
 
 
-    public function headXML(array $info) {
+    public function renderStringToXML(string $info) {
 
-        $str='<?xml version="1.0" encoding="UTF-8"?>
-        <movies>
-        <movie>hola</movie>
-        </movies>';
+        $str=<<<XML
+        <ws_response>
+        $info
+        </ws_response>
+        XML;
+        
+        
 
 
-        $data = simplexml_load_string($str);
+        $this->obj_simplexml_base = new SimpleXMLElement($str);
 
-        echo $data->asXML();
+        echo $this->obj_simplexml_base->asXML();
     }
     
     static function errorXML(){

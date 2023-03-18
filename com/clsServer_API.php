@@ -1,12 +1,10 @@
 <?php
-
-
 class clsServerApi{
 
     private string $configfile;
     private object $obj_xmlutil;
     private array $ArrMethods = array();
-    public array $arrErrors = array();
+    private array $arrErrors = array();
     private int $numMethods = 0;
 
     function __construct($configfile){
@@ -51,13 +49,7 @@ class clsServerApi{
             $this->ArrMethods);
        
     }
-
-    function Print(): void{
-        echo $this->obj_xmlutil->getXML();
-
-    }
     
-
     public function Validate(){
 
         $cont=0;
@@ -102,11 +94,3 @@ class clsServerApi{
         
    
     }
-
-
-
-
-
-
-?>
-

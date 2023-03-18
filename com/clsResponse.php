@@ -1,5 +1,4 @@
 <?php
-
 class Response{
 
     
@@ -10,8 +9,8 @@ class Response{
     private string $execution_time;
     private string $url;
     private array $arrDataHeader = array();
-    // private $templateError;
-    // private $templateResponse;
+    private object $response;
+    private array $results;
 
     public function __construct(bool $debug, string $typeDebug){
        Self::$conditionDebug = $debug;
@@ -66,33 +65,100 @@ class Response{
 
     public function execute( array $data, mixed $execution_time){
 
+        $this->results = $data;
+
         if(!Self::$conditionDebug){
 
             $obj_xml = new ClsXMLUtils;
             
             $this->url = ClsRequest::GetUrl();
 
+            $this->url = htmlspecialchars($this->url, ENT_XML1, 'UTF-8');
+
             $this->server_time = date('l jS \of F Y h:i:s A');
 
-            array_push($this->arrDataHeader,$this->server_id,$this->server_time,$execution_time,$this->url);
+            $this->execution_time = $execution_time;
 
-            header("Content-Type: text/xml");
+            header('Content-Type:text/xml');
 
-            $obj_xml->headXML($this->arrDataHeader);
 
-            // if(count($this->data) == 0){
+            $obj_xml->renderStringToXML($this->headXML().$this->outputsXML());
 
-            //     $urlParams = ClsRequest::GetURLParams();
+        }
 
-            // }else{
-            
-            //     ClsXMLUtils::errorXML('');
-            // }
+    }
+
+    private function headXML(){
+        $str = "
+        <head>
+        <server_id>$this->server_id</server_id>
+        <server_time>$this->server_time</server_time>
+        <execution_time>$this->execution_time</execution_time>
+        <url>$this->url</url>".
+        $this->inputsXML().
+        $this->errorsXML()
+        ."</head>";
+
+        return $str;
+    }
+
+    private function inputsXML(){
+
+        $params = ClsRequest::GetURLParams();
+        if(ClsRequest::Exists('action')){
+            $action = ClsRequest::GetValue('action');
+        }else{
+            $action = '';
+        }
         
+        $str = "<webmethod>
+        <name>".$action."</name>
+        <parameters>";
+
+            foreach($params as $key => $value){
+
+                $key!='action' && $str.='<parameter>
+                <name>'.$key.'</name>
+                <value>'.$value.'</value>
+                </parameter>';
+
+            }
+
+        $str.="</parameters>
+        </webmethod>";
+
+        return $str;
     }
+
+    private function errorsXML(){
+        $str = "<errors>";
+        
+        foreach( $this->results as $result){ 
+
+            $str.="<error>
+            <num_error>".$result->num_error."</num_error>
+            <message_error>".$result->description."</message_error>
+            <severity>".$result->severity."</severity>
+            <user_message>".$result->message."</user_message>
+        </error>";
+        }
+
+        $str.="</errors>";
+        return $str;
     }
 
 
+    private function outputsXML(){
+
+        $str="
+        <body>
+        <response_data></response_data>
+        </body>
+        ";
+
+        return $str;
+
+    }
 }
 
 

@@ -22,13 +22,15 @@ class ClsRequest{
             return $_GET[$param];
     }
 
-
+/////////////////////////////////////////////////////
     static function GetUrl():string{
         $url = 'http://';
         $url.= $_SERVER['HTTP_HOST'];
         $url.= $_SERVER['REQUEST_URI'];  
         return $url;
     }
+
+/////////////////////////////////////////////////////
     static function GetURLParams():array{
         return $_GET;
     }
