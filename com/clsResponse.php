@@ -62,33 +62,40 @@ class Response{
                 break;
             }
     }
+    //--
 
-    public function execute( array $data, mixed $execution_time){
+    public function execute(bool $xsl, array $data, mixed $execution_time){
 
         $this->results = $data;
 
         if(!Self::$conditionDebug){
 
             $obj_xml = new ClsXMLUtils;
-            
+
             $this->url = ClsRequest::GetUrl();
 
             $this->url = htmlspecialchars($this->url, ENT_XML1, 'UTF-8');
 
-            $this->server_time = date('l jS \of F Y h:i:s A');
+            $this->server_time = date('Y-m-d H:i:s');
 
             $this->execution_time = $execution_time;
 
-            header('Content-Type:text/xml');
-
-
-            $obj_xml->renderStringToXML($this->headXML().$this->outputsXML());
+            
+            
+            if($xsl){
+                header('Content-Type:text/html');
+                echo $obj_xml->renderStringToXSL($this->headXML().$this->outputsXML());
+            }else{
+                header('Content-Type:text/xml');
+                echo $obj_xml->renderStringToXML($this->headXML().$this->outputsXML());
+            }
+            
 
         }
 
     }
 
-    private function headXML(){
+    private function headXML():string{
         $str = "
         <head>
         <server_id>$this->server_id</server_id>
@@ -102,7 +109,7 @@ class Response{
         return $str;
     }
 
-    private function inputsXML(){
+    private function inputsXML():string{
 
         $params = ClsRequest::GetURLParams();
         if(ClsRequest::Exists('action')){
@@ -130,7 +137,7 @@ class Response{
         return $str;
     }
 
-    private function errorsXML(){
+    private function errorsXML():string{
         $str = "<errors>";
         
         foreach( $this->results as $result){ 
@@ -148,7 +155,21 @@ class Response{
     }
 
 
-    private function outputsXML(){
+
+
+    private function outputsXML():string{
+
+        $str="
+        <body>
+        <response_data></response_data>
+        </body>
+        ";
+
+        return $str;
+
+    }
+
+    private function outputsXML2():string{
 
         $str="
         <body>

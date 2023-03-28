@@ -8,6 +8,7 @@ class clsServerApi{
     private int $numMethods = 0;
 
     function __construct($configfile){
+ 
         $this->obj_xmlutil= new ClsXMLUtils;
         $this->configfile=$configfile;
         $this->Init();

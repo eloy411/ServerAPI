@@ -8,25 +8,20 @@ include_once "./com/clsError.php";
 include_once "./com/clsResponse.php";
 
 $time_start = microtime(true);
-/////////////////////////////////////
-$response = new Response(false,'config');
+
+$response = new Response(false,'validation');
 
 $obj_api= new clsServerApi("./xml/dbxml.xml");
 
 $result = $obj_api->Validate();
 
-// /////////////////////////////////////
-
 $time_end = microtime(true);
-// //CALCULATE////////////////////////////////////
-$time_exec = $time_end-$time_start;
 
+////CALCULATE TIME-EXECUTE////////////////////////////////////
+$time_exec = $time_end-$time_start;
+$time_exec = substr($time_exec,0,-12);
 //EXECUTE/////////////////////////////////////
 
-$response->execute($result,$time_exec);
-
-
-
-
+$response->execute(true,$result,$time_exec)
 
 ?>

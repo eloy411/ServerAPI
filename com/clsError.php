@@ -37,17 +37,17 @@ class Errors{
                     break;
                 case 4:
                     $this->severity = 'Low';
-                    $this->description = 'no cumple mandatory';
+                    $this->description = $this->element.' no cumple mandatory';
                     $this->message = 'Haga el favor de rellenar el campo';
                     break;
                 case 5:
                     $this->severity = 'Low';
-                    $this->description = 'no es del mismo tipo que la config';
+                    $this->description = $this->element.' no es del mismo tipo que la config';
                     $this->message = 'Haga el favor de no introducir cosas que no son';
                     break;
                 case 6:
                     $this->severity = 'Low';
-                    $this->description = 'no cumple con el minimo de carácteres';
+                    $this->description = $this->element.' no cumple con el minimo de carácteres';
                     $this->message = 'No se acompleje y añada más carácteres';
                     break;
             }

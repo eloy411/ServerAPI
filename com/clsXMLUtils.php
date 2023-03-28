@@ -62,7 +62,7 @@ public function ApplyXPath2(string $pPath,object $pXML):bool{
 //////////////////////////////////////////////////////////////////////////////
 
 
-    public function renderStringToXML(string $info) {
+    public function renderStringToXML(string $info): string {
 
         $str=<<<XML
         <ws_response>
@@ -70,22 +70,34 @@ public function ApplyXPath2(string $pPath,object $pXML):bool{
         </ws_response>
         XML;
         
-        
-
 
         $this->obj_simplexml_base = new SimpleXMLElement($str);
 
-        echo $this->obj_simplexml_base->asXML();
+        return  $this->obj_simplexml_base->asXML();
     }
     
-    static function errorXML(){
 
+
+   public function renderStringToXSL(string $info): string {
+
+        $str=<<<XML
+        <ws_response>
+        $info
+        </ws_response>
+        XML;
+        
+       $xml = new DOMDocument;
+       $xml->loadXML($str);
+       
+       $xsl = new DOMDocument;
+       $xsl->load('./xml/prueba.xslt');
+
+       $proc = new XSLTProcessor;
+       $proc->importStyleSheet($xsl);
+
+       return $proc->transformToXML($xml);
     }
-
-    static function responseXML(){
-
-    }
-
+    
 }
 
 ?>
