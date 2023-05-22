@@ -1,29 +1,32 @@
 <?php
 
+require_once './interfaces/UserInterface.php';
 
-class User{
+class User implements UserInterface{
 
 
     private string $pwd;
     private string $name;
     private string $email;
+    private string $cid;
+    private object $cart;
 
-    private object $connect;
-    private object $controllerDB;
+    private object | null $connect;
+    private object | null $controllerDB;
 
 
     function __construct(string $email, string $pwd, string $name){
 
-        $this->name = $name;
-        $this->pwd = $pwd;
         $this->email = $email;
+        $this->pwd = $pwd;
+        $this->name = $name;
     }
 
     private function userConnectDB():void{
 
         $this->connect = new ConnectDB();
 
-        $PDO = $connect->getPDODB();
+        $PDO = $this->connect->getPDODB();
 
         $this->controllerDB = new ControllerDB($PDO);
 
@@ -39,29 +42,43 @@ class User{
 
     }
 
-    public function register(){
+    public function register():void{
 
         $this->userConnectDB();
 
-        $this->controllerDB->prepareProcedure('sp_sap_user_register',[$this->email,$this->name,$this->pwd]);
+        $this->controllerDB->prepareProcedure('sp_sap_user_register',[$this->email,$this->pwd,$this->name]);
         $this->controllerDB->executeProcedure();
-        $this->controllerDB->fetchExecuteProcedure();
+        $this->controllerDB->fetchExecutionProcedure();
 
-        $this->userDisconnectDB();
+        // $this->userDisconnectDB();
 
     }
 
-    public function login(){
+    public function login():void{
 
         $this->userConnectDB();
 
         $this->controllerDB->prepareProcedure('sp_sap_user_login',[$this->email,$this->pwd]);
         $this->controllerDB->executeProcedure();
-        $this->controllerDB->fetchExecuteProcedure();
+        $this->controllerDB->fetchExecutionProcedure();
 
         $this->userDisconnectDB();
 
     }
+
+    public function logout():void{
+
+        $this->userConnectDB();
+
+        $this->controllerDB->prepareProcedure('sp_sap_user_logout',[$this->cid]);
+        $this->controllerDB->executeProcedure();
+        $this->controllerDB->fetchExecutionProcedure();
+
+        $this->cid = null;
+        $this->userDisconnectDB();
+    }
 }
 
 ?>
+
+

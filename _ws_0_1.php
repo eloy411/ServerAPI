@@ -27,9 +27,17 @@ $time_exec = $time_end-$time_start;
 $time_exec = substr($time_exec,0,-12);
 //EXECUTE/////////////////////////////////////
 
-$obj_connect=new ConnectDB;
 
-$obj_connect->connectON();
+
+
+// $obj_user=new User('eloy@gmail.com','1234','eloy');
+
+// $obj_user->register();
+
+
+
+
+
 // $response->execute(true,$result,$time_exec)
 
 

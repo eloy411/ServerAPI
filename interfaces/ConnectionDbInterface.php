@@ -23,7 +23,7 @@ interface ConnectionDbInterface {
 
     public function getPDODB(): PDO;
     public function initConnection(): void;
-    public function disconnect() : void;
+    public function disconnect(): void;
 
 }
 

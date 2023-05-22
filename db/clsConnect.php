@@ -1,11 +1,11 @@
 <?php
 
-include_once "../interfaces/ConnectionDbInterface.php";
+include_once "./interfaces/ConnectionDbInterface.php";
 
 class ConnectDB implements ConnectionDbInterface{
 
 
-    private object $pdo ;
+    private object | null $pdo ;
 
     function __construct()
     {
@@ -16,7 +16,7 @@ class ConnectDB implements ConnectionDbInterface{
         return $this->pdo;
     }
 
-    private function initConnection(): void  {
+    public function initConnection(): void  {
         $this->pdo = new PDO(
             "sqlsrv:Server=".
             $_ENV['DDBB_HOST'].",".
@@ -27,7 +27,7 @@ class ConnectDB implements ConnectionDbInterface{
         );
     }
 
-    public function disconnect(){
+    public function disconnect():void{
 
         $this->pdo = null;
 
