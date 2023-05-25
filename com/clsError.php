@@ -2,21 +2,24 @@
 
 class Errors{
 
-    public int $num_error;
-    public string $element;
-    public string $severity;
-    public string $description;
-    public string $message;
+    public  $num_error;
+    public $element;
+    public  $severity;
+    public $description;
+    public $message;
+    public  $userMessage;
 
-    public function __construct($error=null,$element=null){
-        $this->defineError($error,$element);
+    public function __construct($error,$element,$userMessage=null){
+        $this->defineError($error,$element,$userMessage);
     }
 
 
- private function defineError(int $error,string $element){
+ private function defineError( $error, $element, $userMessage){
 
         $this->num_error = $error;
         $this->element = $element;
+        $this->userMessage = $userMessage;
+
 
             switch ($error){
                 case 1:
@@ -49,6 +52,11 @@ class Errors{
                     $this->severity = 'Low';
                     $this->description = $this->element.' no cumple con el minimo de carácteres';
                     $this->message = 'No se acompleje y añada más carácteres';
+                    break;
+                case 7:
+                    $this->severity = 'Low';
+                    $this->description = $this->element.' error';
+                    $this->message = $this->userMessage ;
                     break;
             }
         }

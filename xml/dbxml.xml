@@ -13,19 +13,44 @@
                    <mandatory>yes</mandatory>
                    <default>login</default>
                </param>
-               <param name="user">
+               <param name="pwd">
                    <type>string</type>
                    <mandatory>yes</mandatory>
-                   <min_length>15</min_length>
+                   <min_length>1</min_length>
+               </param>
+               <param name="email">
+                   <type>string</type>
+                   <mandatory>yes</mandatory>
+                   <min_length>5</min_length>
+               </param>
+           </params_collection>
+       </web_method>
+             <web_method>
+           <endpoint>_ws_auth.php</endpoint>
+           <description>Register</description>
+           <params_collection>
+               <param name="action">
+                   <type>string</type>
+                   <mandatory>yes</mandatory>
+                   <default>register</default>
+               </param>
+                <param name="name">
+                   <type>string</type>
+                   <mandatory>yes</mandatory>
+                   <min_length>4</min_length>
                </param>
                <param name="pwd">
                    <type>string</type>
                    <mandatory>yes</mandatory>
-                   <min_length>10</min_length>
+                   <min_length>1</min_length>
+               </param>
+               <param name="email">
+                   <type>string</type>
+                   <mandatory>yes</mandatory>
+                   <min_length>5</min_length>
                </param>
            </params_collection>
        </web_method>
- 
  
        <web_method>
            <endpoint>_ws_auth.php</endpoint>
@@ -35,11 +60,6 @@
                    <type>string</type>
                    <mandatory>yes</mandatory>
                    <default>logout</default>
-               </param>
-               <param name="cid">
-                   <type>string</type>
-                   <mandatory>yes</mandatory>
-                   <min_length>5</min_length>
                </param>
            </params_collection>
        </web_method>

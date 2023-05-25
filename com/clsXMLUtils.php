@@ -65,12 +65,12 @@ public function ApplyXPath2(string $pPath,object $pXML):bool{
     public function renderStringToXML(string $info): string {
 
         $str=<<<XML
+        <?xml version="1.0" encoding="UTF-8"?>
         <ws_response>
         $info
         </ws_response>
         XML;
         
-
         $this->obj_simplexml_base = new SimpleXMLElement($str);
 
         return  $this->obj_simplexml_base->asXML();

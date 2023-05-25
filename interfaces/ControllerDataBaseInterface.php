@@ -19,11 +19,7 @@ interface ControllerDataBaseInterface {
 
     public function executeProcedure(): void;
 
-    public function fetchExecutionProcedure(): void;
-
-    // public function renderData(): void;
-
-    // public function renderDataXML(): void;
+    public function fetchExecutionProcedure(): array;
 
 }
 

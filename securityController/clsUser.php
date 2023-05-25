@@ -5,17 +5,18 @@ require_once './interfaces/UserInterface.php';
 class User implements UserInterface{
 
 
-    private string $pwd;
-    private string $name;
-    private string $email;
-    private string $cid;
-    private object $cart;
+    private string | null $pwd;
+    private string | null $name;
+    private string | null $email;
+    private string | null $cid;
+    private object | null $cart;
 
+    private array  | null $xmlResponse;
     private object | null $connect;
     private object | null $controllerDB;
 
 
-    function __construct(string $email, string $pwd, string $name){
+    function __construct(string $email = null, string $pwd = null, string $name = null){
 
         $this->email = $email;
         $this->pwd = $pwd;
@@ -48,37 +49,28 @@ class User implements UserInterface{
 
         $this->controllerDB->prepareProcedure('sp_sap_user_register',[$this->email,$this->pwd,$this->name]);
         $this->controllerDB->executeProcedure();
-        $this->controllerDB->fetchExecutionProcedure();
+        $this->xmlResponse = $this->controllerDB->fetchExecutionProcedure();
 
-        // $this->userDisconnectDB();
+        $this->userDisconnectDB();
 
     }
 
     public function login():void{
-
+       
         $this->userConnectDB();
 
         $this->controllerDB->prepareProcedure('sp_sap_user_login',[$this->email,$this->pwd]);
         $this->controllerDB->executeProcedure();
-        $this->controllerDB->fetchExecutionProcedure();
-
+        $this->xmlResponse = $this->controllerDB->fetchExecutionProcedure();
+        
         $this->userDisconnectDB();
 
     }
 
-    public function logout():void{
-
-        $this->userConnectDB();
-
-        $this->controllerDB->prepareProcedure('sp_sap_user_logout',[$this->cid]);
-        $this->controllerDB->executeProcedure();
-        $this->controllerDB->fetchExecutionProcedure();
-
-        $this->cid = null;
-        $this->userDisconnectDB();
+    public function getResponse():array{
+        return $this->xmlResponse;
     }
+
 }
 
 ?>
-
-

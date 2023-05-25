@@ -9,53 +9,50 @@ class ControllerDB implements ControllerDataBaseInterface{
     private object | null $pdo;
     private object $procedure;
     public $result;
+  
 
     function __construct(PDO $pdo){
 
         $this->pdo = $pdo;
     }
 
-
-    public function prepareProcedure(string $name_procedure, array $params=[]):void{
-
+    public function prepareProcedure(string $name_procedure, array $params = []): void {
+        
         $formatParam = '';
-
-        foreach($params as $param){
-
-            $formatParam .= ' ?,'; 
+    
+        foreach ($params as $param) {
+            $formatParam .= ' ?,';
         }
+    
+        $formatParam = trim($formatParam, ',');
+  
+  
+        $sql = "{CALL $name_procedure($formatParam)}";
 
-        
-        $formatParam = trim($formatParam,',');
-        
-        $this->procedure = $this->pdo->prepare($name_procedure.$formatParam.';');
+        $this->procedure = $this->pdo->prepare($sql);
+  
 
-        foreach($params as $index => $value){
-
+        foreach ($params as $index => $value) {
             $this->procedure->bindParam(($index+1),$params[$index]);
-            
         }
-
-        
     }
 
     public function executeProcedure():void{
-        try {
-            $this->procedure->execute();
+
             
-        } catch (PDOException $e) {
-            echo "Información adicional: " . $e->errorInfo;
-            echo "Error al ejecutar el procedimiento almacenado: " . $e->getMessage();
-            //throw $th;
-        }
+        $this->procedure->execute();    
+  
     }
     
 
-    public function fetchExecutionProcedure():void{
+    public function fetchExecutionProcedure():array{
 
-            $response = $this->procedure->fetchAll(PDO::FETCH_ASSOC); 
-            var_dump($response);
-
+        if($this->procedure->rowCount()===1){
+            $this->procedure->nextRowset();
+        }
+        $this->response = $this->procedure->fetchAll(PDO::FETCH_ASSOC);
+ 
+        return $this->response;
    }
 
 

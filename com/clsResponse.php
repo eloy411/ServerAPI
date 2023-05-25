@@ -11,6 +11,7 @@ class Response{
     private array $arrDataHeader = array();
     private object $response;
     private array $results;
+    private $responseSQL;
 
     public function __construct(bool $debug, string $typeDebug){
        Self::$conditionDebug = $debug;
@@ -64,8 +65,9 @@ class Response{
     }
     //--
 
-    public function execute(bool $xsl, array $data, mixed $execution_time){
+    public function execute(bool $xsl, array $data, mixed $execution_time, mixed $responseSQL=null){
 
+        $this->responseSQL = $responseSQL;
         $this->results = $data;
 
         if(!Self::$conditionDebug){
@@ -161,7 +163,7 @@ class Response{
 
         $str="
         <body>
-        <response_data></response_data>
+        <response_data>".$this->responseSQL."</response_data>
         </body>
         ";
 
