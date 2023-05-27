@@ -63,6 +63,41 @@
                </param>
            </params_collection>
        </web_method>
+
+        <web_method>
+           <endpoint>_ws_auth.php</endpoint>
+           <description>Add in cart</description>
+           <params_collection>
+               <param name="action">
+                   <type>string</type>
+                   <mandatory>yes</mandatory>
+                   <default>addtocart</default>
+               </param>
+               <param name="product">
+                   <type>string</type>
+                   <mandatory>yes</mandatory>
+                   <min_length>1</min_length>
+               </param>
+               <param name="quantity">
+                   <type>string</type>
+                   <mandatory>yes</mandatory>
+                   <min_length>1</min_length>
+               </param>
+           </params_collection>
+       </web_method>
+
+       <web_method>
+           <endpoint>_ws_auth.php</endpoint>
+           <description>get cart</description>
+           <params_collection>
+               <param name="action">
+                   <type>string</type>
+                   <mandatory>yes</mandatory>
+                   <default>getcart</default>
+               </param>
+           </params_collection>
+       </web_method>
+
  
    </web_methods_collection>
 </web_api>

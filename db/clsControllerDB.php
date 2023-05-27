@@ -18,6 +18,7 @@ class ControllerDB implements ControllerDataBaseInterface{
 
     public function prepareProcedure(string $name_procedure, array $params = []): void {
         
+
         $formatParam = '';
     
         foreach ($params as $param) {
@@ -50,6 +51,7 @@ class ControllerDB implements ControllerDataBaseInterface{
         if($this->procedure->rowCount()===1){
             $this->procedure->nextRowset();
         }
+
         $this->response = $this->procedure->fetchAll(PDO::FETCH_ASSOC);
  
         return $this->response;

@@ -36,7 +36,7 @@ class Session
 
         $this->sessionConnectDB();
 
-        $this->getCookie();
+        $this->setCookie();
         $this->controllerDB->prepareProcedure('sp_sap_user_logout',[$this->cookie]);
         $this->controllerDB->executeProcedure();
         $this->controllerDB->fetchExecutionProcedure();
@@ -49,15 +49,26 @@ class Session
         return $this->xmlResponse;
     }
 
-    public function getCookie(){
+    public function setCookie(){
         $this->cookie = $_COOKIE['tokenID'];
     }
 
-    public function setCookie($guid){
+    public function getCookie():string{
+        $this->setCookie();
+        return $this->cookie;
+    }
+
+    public function generateCookie($guid){
         setcookie("tokenID", $guid, time() - 86400 );
         header('Set-Cookie: tokenID=' . urlencode($guid) . '; expires=' . gmdate('D, d M Y H:i:s', time() + 86400) . ' GMT; path=/');
     }
     
+    public function purgue(){
+        $this->sessionConnectDB();
+        $this->controllerDB->prepareProcedure('sp_sap_conn_purgue');
+        $this->controllerDB->executeProcedure();
+        $this->sessionDisconnectDB();
+    }
 
 }
 

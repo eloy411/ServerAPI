@@ -13,10 +13,11 @@ include_once "./com/clsRequest.php";
 include_once "./com/clsError.php";
 include_once "./com/clsResponse.php";
 include_once "./securityController/clsSecurityController.php";
+include_once "./business_model/clsCart.php";
 
 $time_start = microtime(true);
 
-$response = new Response(false,'validation');
+$response = new Response(false,'config');
 
 $obj_api= new clsServerApi("./xml/dbxml.xml");
 
@@ -39,6 +40,8 @@ $errors_result =$obj_segurityController->getResult();
 $responseSQL = $obj_segurityController->getData();
 
 $response->execute(false,$errors_result,$time_exec,$responseSQL);
+
+// var_dump($responseSQL);
 
 
 ?>
