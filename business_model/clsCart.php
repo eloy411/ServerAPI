@@ -1,11 +1,13 @@
 <?php
 
-class Cart{
+require_once './interfaces/Cartinterface.php';
+
+class Cart implements CartInterface{
 
     
-    public $quantity;
-    public $guid;
-    public $product;
+    public string | null $quantity;
+    public string | null $guid;
+    public string | null $product;
 
     private array  | null $xmlResponse;
     private object | null $connect;
@@ -39,7 +41,7 @@ class Cart{
 
     }
 
-    public function addToCart(){
+    public function addToCart():void{
 
         $this->cartConnectDB();
         $this->controllerDB->prepareProcedure('sp_add_to_cart',[$this->product,$this->guid,$this->quantity]);
@@ -51,7 +53,7 @@ class Cart{
     }
 
     
-    public function dropFromCart(){
+    public function dropFromCart():void{
         
         $this->cartConnectDB();
         $this->controllerDB->prepareProcedure('sp_drop_from_cart',[$this->product,$this->guid]);
@@ -61,7 +63,7 @@ class Cart{
     }
 
     
-    public function getCart(){
+    public function getCart():void{
         
         $this->cartConnectDB();
         $this->controllerDB->prepareProcedure('sp_get_cart',[$this->guid]);
@@ -70,7 +72,7 @@ class Cart{
         $this->cartDisconnectDB();
     }
 
-    public function getResponse(){
+    public function getResponse():array{
         return $this->xmlResponse;
     }
 

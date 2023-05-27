@@ -1,25 +1,15 @@
 <?php
 
-/**
- *  CONSTRUCTOR PARAMS
- * ----------------------------------
- * $this->db = $pDB;
- * 
- * 
- * PRIVATE FUNCTION
- * ----------------------------------
- * bindParamsToProcedure(string $name, array $params): void;
- * putInterrogationMarks(array $params): string;
- * 
- */
 
-interface ControllerDataBaseInterface {
+interface CartInterface {
 
-    public function prepareProcedure(string $name_procedure, array $params=[]): void;
+    public function addToCart(): void;
 
-    public function executeProcedure(): void;
+    public function dropFromCart():void;
 
-    public function fetchExecutionProcedure(): array;
+    public function getCart():void;
+
+    public function getResponse():array;
 
 }
 

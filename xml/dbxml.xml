@@ -98,6 +98,22 @@
            </params_collection>
        </web_method>
 
+    <web_method>
+           <endpoint>_ws_auth.php</endpoint>
+           <description>drop product from cart</description>
+           <params_collection>
+               <param name="action">
+                   <type>string</type>
+                   <mandatory>yes</mandatory>
+                   <default>dropfromcart</default>
+               </param>
+               <param name="product">
+                   <type>string</type>
+                   <mandatory>yes</mandatory>
+                   <min_length>1</min_length>
+               </param>
+           </params_collection>
+       </web_method>
  
    </web_methods_collection>
 </web_api>

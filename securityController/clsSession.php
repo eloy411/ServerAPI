@@ -1,10 +1,8 @@
 <?php
 
-/*
-    Use the static method getInstance to get the object.
-*/
+require_once './interfaces/SessionInterface.php';
 
-class Session
+class Session implements SessionInterface
 {
     private array  | null $xmlResponse;
     private object | null $connect;
@@ -41,7 +39,7 @@ class Session
         $this->controllerDB->executeProcedure();
         $this->controllerDB->fetchExecutionProcedure();
 
-        $this->cid = null;
+        $this->cookie = null;
         $this->sessionDisconnectDB();
     }
 
@@ -49,7 +47,7 @@ class Session
         return $this->xmlResponse;
     }
 
-    public function setCookie(){
+    private function setCookie():void{
         $this->cookie = $_COOKIE['tokenID'];
     }
 
@@ -58,16 +56,26 @@ class Session
         return $this->cookie;
     }
 
-    public function generateCookie($guid){
+    public function generateCookie($guid):void{
         setcookie("tokenID", $guid, time() - 86400 );
         header('Set-Cookie: tokenID=' . urlencode($guid) . '; expires=' . gmdate('D, d M Y H:i:s', time() + 86400) . ' GMT; path=/');
     }
     
-    public function purgue(){
+    public function purgue():void{
         $this->sessionConnectDB();
         $this->controllerDB->prepareProcedure('sp_sap_conn_purgue');
         $this->controllerDB->executeProcedure();
         $this->sessionDisconnectDB();
+    }
+
+    public function updateBatch():void{
+
+        $this->setCookie();
+        $this->sessionConnectDB();
+        $this->controllerDB->prepareProcedure('sp_sap_conn_update_lbatch',[$this->cookie]);
+        $this->controllerDB->executeProcedure();
+        $this->sessionDisconnectDB();
+        
     }
 
 }

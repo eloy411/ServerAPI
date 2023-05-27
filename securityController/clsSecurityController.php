@@ -9,7 +9,7 @@ class SecurityController{
     private array | object $response;
     private object $xml;
     private string $data = 'not Data';
-    private $cookies;
+    private string $cookies;
     private object $session;
 
     public function __construct($result){
@@ -57,6 +57,7 @@ class SecurityController{
             case 'addtocart':
 
                 $this->session->purgue();
+                $this->session->updateBatch();
                 $cart = new Cart($this->params["product"],$this->session->getCookie(),$this->params["quantity"]);
                 $cart->addToCart();
                 $this->response = $cart->getResponse();
@@ -66,6 +67,7 @@ class SecurityController{
             case 'dropfromcart':
 
                 $this->session->purgue();
+                $this->session->updateBatch();
                 $cart = new Cart($this->params["product"],$this->session->getCookie(),null);
                 $cart->dropFromCart();
                 $this->response = $cart->getResponse();
@@ -75,7 +77,7 @@ class SecurityController{
             case 'getcart':
 
                 $this->session->purgue();
-                $session->getCookie();
+                $this->session->updateBatch();
                 $cart = new Cart(null,$this->session->getCookie(),null);
                 $cart->getCart();
                 $this->response = $cart->getResponse();
